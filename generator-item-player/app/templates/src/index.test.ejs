@@ -1,0 +1,28 @@
+import <%= title %>Player from "./<%= title_file_prefix %>.player";
+import { BaseItemPlayer } from "libs-base-item-player";
+
+let playerInstance;
+
+beforeAll(() => {
+  playerInstance = new <%= title %>Player();
+});
+
+test("Player extends BaseItemPlayer", () => {
+  expect(playerInstance instanceof BaseItemPlayer).toBeTruthy();
+});
+
+test("Player implements initItems", () => {
+  expect(playerInstance.initItem).toBeDefined();
+});
+
+test("Player implements focalise", () => {
+  expect(playerInstance.focalise).toBeDefined();
+});
+
+test("Player implements subscribe", () => {
+  expect(playerInstance.subscribe).toBeDefined();
+});
+
+test("Player implements unsubscribe", () => {
+  expect(playerInstance.unsubscribe).toBeDefined();
+});

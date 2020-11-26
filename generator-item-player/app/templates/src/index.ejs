@@ -1,0 +1,58 @@
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { IntlProvider } from "react-intl";
+
+import { BaseItemPlayer } from "libs-base-item-player";
+import { IInitOptions } from "libs-interface-item-player/src/interface-item";
+import { ThemeProvider } from "libs-player-ui-components";
+
+import <%= title %>Model from "./model/<%= title_file_prefix %>.model";
+import <%= title %>Container from "./container/<%= title_file_prefix %>.container";
+
+export default class <%= title %>Player extends BaseItemPlayer {
+  private el: HTMLElement;
+  protected model: <%= title %>Model;
+
+  initItem(uid: string, itemJSON: any, container: HTMLElement, initOptions: IInitOptions): void {
+    try {
+      super.initItem(uid ,itemJSON, container, initOptions);
+      this.el = container;
+      this.model = new <%= title %>Model(itemJSON, this.eventMgr);
+      ReactDOM.render(
+        <IntlProvider locale={navigator.language} defaultLocale="en-US">
+          {/* Theme will come in initOptions.uiStyles.theme which can then be passed in ThemeProvider's theme prop */}
+          <ThemeProvider theme={{}}>
+            <<%= title %>Container
+              model={this.model}
+              eventMgr={this.eventMgr}
+              itemEventsCallback={this.itemEventsCallback}
+            />
+          </ThemeProvider>
+        </IntlProvider>,
+        container
+      );
+    } catch (err) {
+      this.itemEventsCallback("error", {
+        errorMessage: "Error in initItem:" + err.message
+      });
+    }
+  }
+
+  destroy(): void {
+    try {
+      ReactDOM.unmountComponentAtNode(this.el);
+    } catch (err) {
+      this.itemEventsCallback("error", {
+        errorMessage: "Error in destroy:" + err.messsage
+      });
+    }
+  }
+
+  focalise(): void {
+    //TODO: Add any custom logic to give focus to your player. (Use model for communication with container)
+  }
+
+  subscribe(eventName: string, eventHandler: Function): void {}
+
+  unsubscribe(eventName: string, eventHandler: Function): void {}
+}

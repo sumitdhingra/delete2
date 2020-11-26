@@ -1,0 +1,113 @@
+import * as React from "react";
+import { EventMgr, EVENTS } from "libs-base-item-player";
+import {
+  Container,
+  Instruction,
+  QuestionText,
+  Divider,
+  Feedback,
+  Hint,
+  Alert
+} from "libs-player-ui-components";
+import { Hint as HintType } from "libs-base-item-player/model/item_player_model.types";
+
+import <%= title %>Model from "../model/<%= title_file_prefix %>.model";
+import Sample from "../components/sample/sample.component";
+
+interface Props {
+  model: <%= title %>Model;
+  eventMgr: EventMgr;
+  itemEventsCallback: (type: string, data: any) => void;
+}
+
+interface State {}
+
+class <%= title %>Container extends React.Component<Props, State> {
+  rootRef: HTMLDivElement;
+
+  componentDidMount() {
+    this.props.eventMgr.subscribe(EVENTS.DATA_CHANGED, this.onDataChanged);
+    this.props.itemEventsCallback("launched", null);
+    this.triggerSizeCallback();
+  }
+
+  componentWillUnmount() {
+    this.props.eventMgr.unsubscribe(EVENTS.DATA_CHANGED);
+  }
+
+  triggerSizeCallback = () => {
+    this.props.itemEventsCallback("size", {
+      height: this.rootRef.clientHeight,
+      width: this.rootRef.clientWidth
+    });
+  };
+
+  onDataChanged = () => {
+    // TODO: This function will be called whenever the model's data is changed. Update your local state accordingly.
+    // Use this.props.model to access the model instance. Also remove the force Update function by your own setState
+    this.forceUpdate();
+    this.triggerSizeCallback();
+  };
+
+  render() {
+    return (
+      <div
+        ref={ref => {
+          if (ref) this.rootRef = ref;
+        }}
+      >
+        <Container maxWidth="1024px" margin="auto">
+          {this.props.model.getInstruction() &&
+            this.props.model.getInstruction().content.data != "" && (
+              <Instruction
+                instructionText={this.props.model.getInstruction().content.data}
+              />
+            )}
+          {this.props.model.getStimulus() &&
+            this.props.model.getStimulus().content.data != "" && (
+              <QuestionText
+                questionText={this.props.model.getStimulus().content.data}
+              />
+            )}
+          <Divider />
+          <Sample />
+          {this.props.model.getIsFeedbackShown() && (
+            <Feedback
+              isCorrect={
+                this.props.model.getItemResponse().outcomes.status === "correct"
+              }
+              generalFeedback={
+                this.props.model.getFeedback().general.content.data
+              }
+              feedback={
+                this.props.model.getItemResponse().outcomes.status === "correct"
+                  ? this.props.model.getFeedback().correct.content.data
+                  : this.props.model.getFeedback().incorrect.content.data
+              }
+            />
+          )}
+          {this.props.model.getIsHintShown() &&
+            this.props.model.getHints().map(
+              (option: HintType, index: number) =>
+                index <
+                  this.props.model.getItemResponse().consumedHints.length && (
+                  <Hint
+                    key={index}
+                    hintText={option.content.data}
+                    labels={{
+                      title: "Hint " + (index + 1)
+                    }}
+                  />
+                )
+            )}
+
+          {this.props.model.getIsNoOptionSelectedAlertShown() && (
+            <Alert alertMessage="The question has been submitted without an option." />
+          )}
+        </Container>
+      </div>
+    );
+  }
+}
+
+export default <%= title %>Container;

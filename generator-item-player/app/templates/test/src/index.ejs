@@ -1,0 +1,224 @@
+import Player from "../../src/<%= title_file_prefix %>.player";
+
+let itemJSON = {
+  "itemId": "leonardo-dev-1553",
+  "type": "Item",
+  "subType": "<%= title_file_prefix %>",
+  "status": "complete",
+  "displayType": "embedded",
+  "toolName": "paint",
+  "toolVersion": "1.0",
+  "systemMeta": {
+    "orgId": "leonardo-dev",
+    "state": "draft",
+    "revision": "1",
+    "created": {
+      "timestamp": "2019-09-03T05:38:18.168Z",
+      "userId": "be6d5f4a-46f9-11e8-83c3-0acad1ee5072"
+    },
+    "lastModified": {
+      "timestamp": "2019-09-04T12:57:42.535Z",
+      "userId": "be6d5f4a-46f9-11e8-83c3-0acad1ee5072"
+    },
+    "schemaVersion": "2.0",
+    "assetsBasePath": "https://s3.amazonaws.com/paint.leonardodls.com/organization_bucket/"
+  },
+  "itemMeta": {
+    "title": "Title",
+    "description": "Description",
+    "tags": {
+      "domain": "Engineering",
+      "difficulty": "Beginner",
+      "custom": [""]
+    },
+    "skill": "",
+    "learningObjective": ""
+  },
+  "itemBody": {
+    "instruction": {
+      "content": {
+        "type": "item-text",
+        "data": "Read the passage and answer the question given below:"
+      }
+    },
+    "stimulus": {
+      "content": {
+        "type": "item-html",
+        "data": "<p >At sun set Ram and Laxman come in a chariot with Vanar Sena. Ram shoots arrows at the effigies. The effigies catch fire and burn to ashes. Fireworks and crackers explode in the air. People in some areas of Rajasthan go to greet each other. Dussehra is a symbol of victory of good over evil.</p><h6>The passage is about -</h6>"
+      }
+    },
+    "validations": [
+      {
+        "validationId": "v1",
+        "responseContainer": "1",
+        "correctResponse": "Dussehra",
+        "operator": "text_equals"
+      }
+    ],
+    "scoring": {
+      "rules": [
+        {
+          "type": "compute",
+          "validationId": "v1",
+          "score": 2
+        }
+      ]
+    },
+    "preferences": {
+      "shuffle": true,
+      "score": 2,
+      "layout": {
+        "orientation": "vertical/horizontal"
+      }
+    },
+    "feedback": {
+      "general": {
+        "content": {
+          "type": "item-text",
+          "data": "General Feedback"
+        }
+      },
+      "correct": {
+        "content": {
+          "type": "item-text",
+          "data": "Feedback For Correct Answer"
+        }
+      },
+      "incorrect": {
+        "content": {
+          "type": "item-text",
+          "data": "Feedback For Incorrect Answer"
+        }
+      }
+    },
+    "hints": [
+      {
+        "id": "H1",
+        "content": {
+          "type": "item-text",
+          "data": "Hint 1"
+        }
+      },
+      {
+        "id": "H2",
+        "content": {
+          "type": "item-text",
+          "data": "Hint 2"
+        }
+      }
+    ]
+  },
+  "itemResponse": {
+    "userResponse": [],
+    "hintsShown": false,
+    "feedbackShown": false,
+    "noOptionSelectedAlertShown": false,
+    "locked": false,
+    "consumedHints": [],
+    "outcomes": {
+      "score": 0,
+      "scoringStatus": "",
+      "attemptStatus": ""
+    },
+    "focusOn": "Hint"
+  },
+  "itemResources": {
+    "RE1": {
+      "type": "image",
+      "systemAttribs": {
+        "fileName": "initial.png",
+        "fileSize": 19785,
+        "uploadedOn": "2019-02-14T11:20:51.099Z"
+      },
+      "resourceInfo": {}
+    }
+  }
+};
+
+function readyHandler(eventArgs) {
+  console.log("data: ", eventArgs);
+}
+
+function checkAnswerHandler(eventArgs) {
+  console.log("eventArgs inside CheckAnswerHandler", eventArgs);
+  console.log("Response", eventArgs.response);
+}
+
+function retryHandler(eventArgs) {
+  console.log("eventArgs inside retryHandler", eventArgs);
+}
+
+function resetHandler(eventArgs) {
+  console.log("eventArgs inside resetHandler", eventArgs);
+}
+
+function changeHandler(eventArgs) {
+  console.log("eventArgs inside  errorhandler", eventArgs);
+}
+
+function renderHandler(eventArgs) {
+  console.log("eventArgs inside  errorhandler", eventArgs);
+}
+function errorHandler(eventArgs) {
+  console.log("eventArgs inside  errorhandler", eventArgs);
+}
+function interactedHandler(eventArgs) {
+  console.log("eventArgs inside  interactedHandler", eventArgs);
+}
+function sizeHandler(eventArgs) {
+  console.log("eventArgs inside  sizeHandler", eventArgs);
+}
+function launchedHandler(eventArgs) {
+  console.log("eventArgs inside  launchedHandler", eventArgs);
+}
+
+let events = {
+  change: changeHandler,
+  ready: readyHandler,
+  checkAnswer: checkAnswerHandler,
+  retry: retryHandler,
+  reset: resetHandler,
+  error: errorHandler,
+  render: renderHandler,
+  interacted: interactedHandler,
+  size: sizeHandler,
+  launched: launchedHandler
+};
+let uiStyle = {
+  dimensions: "container-dim"
+};
+
+const player = new Player();
+
+player.initItem("uid", itemJSON, document.getElementById("root"), {
+  events,
+  uiStyle
+});
+player.focalise();
+
+document.getElementById("checkMyWork").onclick = function() {
+  player.validateResponse();
+  player.lock();
+};
+
+document.getElementById("reset").onclick = function() {
+  player.redo({ retainUserResponse: false });
+  player.unlock();
+};
+
+document.getElementById("tryAgain").onclick = function() {
+  player.redo({ retainUserResponse: true });
+  player.unlock();
+};
+
+document.getElementById("showHint").onclick = function() {
+  player.showHints();
+};
+document.getElementById("show").onclick = function() {
+  document.getElementById("refId").style.display = "block";
+  player.show();
+};
+document.getElementById("hide").onclick = function() {
+  document.getElementById("refId").style.display = "none";
+  player.hide();
+};

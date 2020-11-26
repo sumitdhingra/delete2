@@ -1,0 +1,18 @@
+const path = require("path");
+
+module.exports = require("./webpack.base.config")({
+  entry: "./src/<%= title_file_prefix %>.player.tsx",
+  mode: "production",
+  output: {
+    path: path.resolve(__dirname, "build"),
+    filename: "libs-<%= title_file_prefix %>-item-player.js",
+    library: "libs-<%= title_file_prefix %>-item-player",
+    libraryTarget: "umd",
+    libraryExport: "default"
+  },
+  externals: {
+    react: "react",
+    "react-dom": "react-dom",
+    "libs-player-ui-components": "libs-player-ui-components"
+  }
+});

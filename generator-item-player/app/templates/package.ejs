@@ -1,0 +1,41 @@
+{
+  "name": "libs-<%= title_file_prefix %>-item-player",
+  "version": "0.0.1",
+  "description": "<%= title %> Item Player for x-type Assessments",
+  "main": "build/libs-<%= title_file_prefix %>-item-player.js",
+  "scripts": {
+    "start": "webpack-dev-server --config webpack.dev.config.js",
+    "build": "webpack --config webpack.prod.config.js",
+    "test": "jest"
+  },
+  "author": "Compro",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-react": "^7.8.3",
+    "@types/jest": "^25.1.2",
+    "@types/react": "^16.9.19",
+    "@types/react-dom": "^16.9.5",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.4.2",
+    "html-webpack-plugin": "^3.2.0",
+    "jest": "^25.1.0",
+    "libs-interface-item-player": "git+https://bitbucket.org/comprodls/libs-interface-item-player.git",
+    "libs-player-ui-components": "git+https://bitbucket.org/comprodls/libs-player-ui-components.git",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "style-loader": "^1.1.3",
+    "ts-jest": "^25.2.0",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.5",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
+  },
+  "dependencies": {
+    "libs-base-item-player": "git+https://bitbucket.org/comprodls/libs-base-item-player.git",
+    "libs-player-scoring-engine": "git+https://bitbucket.org/comprodls/libs-player-scoring-engine.git",
+    "react-intl": "^3.12.0"
+  }
+}
